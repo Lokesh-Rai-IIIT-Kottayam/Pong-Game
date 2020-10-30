@@ -2,8 +2,10 @@ import socket
 from _thread import *
 import sys
 from random import randint
+import time
+
 server = "192.168.137.1"
-port = 5014
+port = 5000
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -21,7 +23,6 @@ def read_pos(s):
 
 
 def make_pos(tup):
-    print(tup)
     return str(tup[0]) + "," + str(tup[1]) + "," + str(tup[2]) + "," + str(tup[3])
 
 class Ball:
@@ -44,8 +45,13 @@ currentPlayer = 0
 pos = [(200, 450,250,250),(200, 50,250,250)]
 b = Ball(250, 250)
         
+def ball(conn):
+    while True:
+         b.move(pos[0][0], pos[1][0], pos[0][1], pos[1][1])
+         time.sleep(0.02)
 
 def threaded_client(conn, player):
+    global currentPlayer
     conn.send(str.encode(make_pos(pos[player])))
     reply = ""
     
@@ -56,7 +62,7 @@ def threaded_client(conn, player):
 
             if currentPlayer==2:
                 pos[(not player)] = pos[(not player)][:2]+(b.cx, b.cy)
-                b.move(pos[0][0], pos[1][0], pos[0][1], pos[1][1])
+               
             
             if not data:
                 print("Disconnected")
@@ -73,6 +79,7 @@ def threaded_client(conn, player):
             break
 
     print("Lost connection")
+    currentPlayer-=1
     conn.close()
 
 
@@ -81,4 +88,4 @@ while True:
     print("Connected to:", addr)
     start_new_thread(threaded_client, (conn, currentPlayer))
     currentPlayer += 1
-    
+    start_new_thread(ball, (conn,))
