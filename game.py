@@ -6,8 +6,8 @@ width = 500
 height = 500
 w = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Pong Game")
-
-
+w.fill((0, 0, 0))
+pygame.display.flip()
 
 class Player():
     def __init__(self, x, y, width, height, color):
@@ -59,7 +59,7 @@ def make_pos(tup):
 
 
 def redrawwdow(w,player, player2,b):
-    w.fill((255,255,255))
+    w.fill((0,0,0))
     player.draw(w)
     player2.draw(w)
     b.draw(w)

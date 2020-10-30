@@ -5,7 +5,7 @@ from random import randint
 import time
 
 server = "192.168.137.1"
-port = 5000
+port = 5003
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -48,7 +48,7 @@ b = Ball(250, 250)
 def ball(conn):
     while True:
          b.move(pos[0][0], pos[1][0], pos[0][1], pos[1][1])
-         time.sleep(0.02)
+         time.sleep(0.015)
 
 def threaded_client(conn, player):
     global currentPlayer
